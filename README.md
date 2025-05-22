@@ -31,9 +31,13 @@ A command-line tool that turns any [Spotify](https://open.spotify.com/) playlist
 
 ### Option 2: Build from source
 1. Clone this repository
-2. Build the project:
+2. Build the project using one of these methods:
    ```bash
-   go build -o temaster
+   # Using go build
+   go build -o temaster ./cmd
+
+   # Or using make
+   make build
    ```
 3. Move the executable to your PATH (optional):
    ```bash
