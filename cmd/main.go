@@ -1,13 +1,13 @@
 package main
 
 import (
+	"crypto/rand"
 	"fmt"
-	"math/rand"
+	"math/big"
 	"os"
 	"os/exec"
 	"runtime"
 	"strings"
-	"time"
 
 	"github.com/meacuna/temaster/internal/spotify"
 )
@@ -63,9 +63,6 @@ func main() {
 
 	fmt.Printf("This playlist has %d songs\n", len(tracks))
 
-	// Create a new random source with current time
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-
 	// Create a map to track played songs
 	playedTracks := make(map[string]bool)
 	remainingTracks := len(tracks)
@@ -89,7 +86,12 @@ func main() {
 		// Get a random track that hasn't been played yet
 		var track string
 		for {
-			randomIndex := r.Intn(len(tracks))
+			n, err := rand.Int(rand.Reader, big.NewInt(int64(len(tracks))))
+			if err != nil {
+				fmt.Printf("Error generating random number: %v\n", err)
+				os.Exit(1)
+			}
+			randomIndex := int(n.Int64())
 			track = tracks[randomIndex]
 			if !playedTracks[track] {
 				playedTracks[track] = true
